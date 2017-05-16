@@ -85,6 +85,6 @@ public class Factory : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	private bool SpawnLocationEmpty(Vector3 location) {
-		
+		return true;
 	}
 }
