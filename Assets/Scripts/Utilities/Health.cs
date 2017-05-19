@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +19,13 @@ public class Health : MonoBehaviour {
 		maxHealth = startingHealth;
 	}
 
+	//----------------------------------------------------------
+	//AdjustHealth()
 	//Adjusts the objects health by a given amount
+	//Return:
+	//		int amount, the amount to adjust health by
+	//----------------------------------------------------------
+
 	public void AdjustHealth(int amount) {
 		//If the given amount will bring us over max health
 		//do nothing

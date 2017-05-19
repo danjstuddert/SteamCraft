@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,6 +10,8 @@ public class GameController : Singleton<GameController> {
 		foreach(Factory f in FindObjectsOfType(typeof(Factory))){
 			f.Init ();
 		}
+
+		PlayerController.Instance.Init();
 	}
 
 	//----------------------------------------------------------
