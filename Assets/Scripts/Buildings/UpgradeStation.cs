@@ -10,6 +10,8 @@ public class UpgradeStation : MonoBehaviour {
 	public GameObject botPrefab;
 	//The location to spawn the upgradedBot
 	public Transform spawnLocation;
+	//The player that owns this upgrade station
+	public Player owningPlayer;
 
 	//The number of items to left to spawn
 	private int spawnCounter;
@@ -40,7 +42,8 @@ public class UpgradeStation : MonoBehaviour {
 		if(upgradeCounter <= upgradeTime) {
 			upgradeCounter += Time.deltaTime;
 		} else {
-			SimplePool.Spawn(botPrefab, spawnLocation.position, botPrefab.transform.rotation);
+			Bot b = SimplePool.Spawn(botPrefab, spawnLocation.position, botPrefab.transform.rotation).GetComponent<Bot>();
+			b.GiveTarget(GameController.Instance.GetOpposingFactory(owningPlayer).transform);
 			upgradeCounter = 0f;
 		}
 	}

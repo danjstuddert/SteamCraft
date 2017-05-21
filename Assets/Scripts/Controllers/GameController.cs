@@ -6,9 +6,14 @@ using UnityEngine.SceneManagement;
 //Handles the starting and running of the game, 
 //including despawning of killed units and win conditions
 public class GameController : Singleton<GameController> {
+	//All of the factories in the game
+	private List<Factory> factoryList;
+
 	void Start () {
 		//Make sure we initalise our factories correctly
+		factoryList = new List<Factory>();
 		foreach(Factory f in FindObjectsOfType(typeof(Factory))){
+			factoryList.Add(f);
 			f.Init ();
 		}
 
@@ -40,6 +45,16 @@ public class GameController : Singleton<GameController> {
 
 		//Despawn the object using the object pooling script
 		SimplePool.Despawn (obj);	
+	}
+
+	public Factory GetOpposingFactory(Player p) {
+		foreach (Factory f in factoryList) {
+			if(f.owningPlayer != p) {
+				return f;
+			}
+		}
+
+		return null;
 	}
 
 	//----------------------------------------------------------

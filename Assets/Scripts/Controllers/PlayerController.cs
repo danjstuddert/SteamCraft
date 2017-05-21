@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum Faction { Red, Blue }
+
 //A script that manages the instances of player objects in the game
 public class PlayerController : Singleton<PlayerController> {
 	private List<Player> players;

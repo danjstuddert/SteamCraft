@@ -26,11 +26,18 @@ public abstract class Bot : MonoBehaviour {
 		OwningPlayer = homeFactory.owningPlayer;
 
 		movement = GetComponent<BotMove>();
-		movement.Init(OwningPlayer);
+		movement.Init();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	//----------------------------------------------------------
+	//GiveTarget()
+	//Gives a target to the attached movement script
+	//Param:
+	//		Transform target - the target to give the movement script
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public virtual void GiveTarget(Transform target) {
+		movement.GiveTarget(target);
 	}
 }

@@ -25,17 +25,26 @@ public class BotMove : MonoBehaviour {
 	//Return:
 	//		Void
 	//----------------------------------------------------------
-	public void Init(Player p) {
+	public void Init() {
 		movementMode = startingMovementMode;
 		navMeshAgent = GetComponent<NavMeshAgent>();
-
-		//This will have to be altered when we expand into the control functionality 
-		//but it will work for now
-		currentTarget = p.transform;
 	}
 
 	void Update () {
 		HandleMove();		
+	}
+
+	//----------------------------------------------------------
+	//GiveTarget()
+	//Updates and moves to the given target
+	//Param:
+	//		Transform target - the target to move to
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public void GiveTarget(Transform target) {
+		currentTarget = target;
+		movementMode = MovementMode.MoveToPoint;
 	}
 
 	//----------------------------------------------------------
