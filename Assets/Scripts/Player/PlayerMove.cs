@@ -58,10 +58,12 @@ public class PlayerMove : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	private void MovePlayer() {
-		rBody.AddForce(moveVelocity * movementSpeed);
+		if(rBody != null) {
+			rBody.AddForce(moveVelocity * movementSpeed);
 
-		if(rBody.velocity.magnitude > maxMovementSpeed) {
-			rBody.velocity = rBody.velocity.normalized * maxMovementSpeed;
+			if (rBody.velocity.magnitude > maxMovementSpeed) {
+				rBody.velocity = rBody.velocity.normalized * maxMovementSpeed;
+			}
 		}
 	}
 

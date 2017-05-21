@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +12,8 @@ public class Factory : MonoBehaviour {
 	public int maxBotNumber;
 	//botSpawnTime is the time it takes to spawn a bot
 	public float botSpawnTime;
+	//The player that owns this factory
+	public Player owningPlayer;
 
 	//spawnLocations is a list of all of our spawn locations
 	private List<Vector3> spawnLocations;

@@ -31,8 +31,10 @@ public class PlayerController : Singleton<PlayerController> {
 	//Return:
 	//		Void
 	//----------------------------------------------------------
-	public void PlayerDead(Player player) {
-		if(players.Exists(p => p == player)) {
+	public void PlayerDead(GameObject player) {
+		Player playerScript = player.GetComponent<Player>();
+
+		if(players.Exists(p => p == playerScript)) {
 
 		} else {
 			Debug.LogError(string.Format("{0} is not a recognised player!", player.name));

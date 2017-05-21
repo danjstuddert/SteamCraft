@@ -8,7 +8,6 @@ public class Player : MonoBehaviour {
 	//The player's movement script
 	private PlayerMove move;
 
-
 	//----------------------------------------------------------
 	//Init()
 	//Ensures correct setup of the Player component
