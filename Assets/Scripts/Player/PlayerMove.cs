@@ -5,8 +5,6 @@ using XboxCtrlrInput;
 
 //Handles the movement of the player objects
 public class PlayerMove : MonoBehaviour {
-	//The controller that controls the object
-	public XboxController controller;
 	//The speed that the player moves at
 	public float movementSpeed;
 	//The maximum speed that the player can move at
@@ -14,6 +12,8 @@ public class PlayerMove : MonoBehaviour {
 	//The speed the player rotates at
 	public float rotationSpeed;
 
+	//The controller that controls the object
+	private XboxController controller;
 	//The player's rigidbody component
 	private Rigidbody rBody;
 	//The velocity to apply every fixed update
@@ -27,9 +27,10 @@ public class PlayerMove : MonoBehaviour {
 	//Return:
 	//		Void
 	//----------------------------------------------------------
-	public void Init () {
+	public void Init (XboxController controller) {
 		rBody = GetComponent<Rigidbody>();
 		previousRotationDirection = Vector3.forward;
+		this.controller = controller;
 	}
 
 	void Update () {
@@ -74,18 +75,20 @@ public class PlayerMove : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	private void RotatePlayer() {
-		Vector3 directionVector = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0f, XCI.GetAxis(XboxAxis.RightStickY, controller));
+		if(XCI.GetAxis(XboxAxis.LeftTrigger, controller) == 0){
+			Vector3 directionVector = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0f, XCI.GetAxis(XboxAxis.RightStickY, controller));
 
-		//If the right thumbstick is not being used, make sure we stay facing the previous direction
-		if(directionVector.magnitude < 0.1f) {
-			directionVector = previousRotationDirection;
+			//If the right thumbstick is not being used, make sure we stay facing the previous direction
+			if(directionVector.magnitude < 0.1f) {
+				directionVector = previousRotationDirection;
+			}
+
+			directionVector = directionVector.normalized;
+			previousRotationDirection = directionVector;
+
+			Vector3 newDirection = Vector3.RotateTowards(transform.forward, directionVector, rotationSpeed * Time.deltaTime, 0f);
+
+			transform.rotation = Quaternion.LookRotation(newDirection);	
 		}
-
-		directionVector = directionVector.normalized;
-		previousRotationDirection = directionVector;
-
-		Vector3 newDirection = Vector3.RotateTowards(transform.forward, directionVector, rotationSpeed * Time.deltaTime, 0f);
-
-		transform.rotation = Quaternion.LookRotation(newDirection);
 	}
 }

@@ -21,12 +21,15 @@ public class SpawnPoint : MonoBehaviour {
 		IsOccupied = true;
 	}
 
-	void OnTriggerEnter(){
-		IsOccupied = true;
+	void OnTriggerEnter(Collider other){
+		if(other.tag == "Drone"){
+			IsOccupied = true;	
+		}
 	}
 
-	void OnTriggerExit(){
-		Debug.Log ("Exit");
-		IsOccupied = false;
+	void OnTriggerExit(Collider other){
+		if(other.tag == "Drone"){
+			IsOccupied = false;	
+		}
 	}
 }
