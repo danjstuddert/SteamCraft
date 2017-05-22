@@ -47,6 +47,35 @@ public class GameController : Singleton<GameController> {
 		SimplePool.Despawn (obj);	
 	}
 
+	//----------------------------------------------------------
+	//GetOwningFactory()
+	//Gets the factory owned by the player
+	//Param:
+	//		Player p - the player to check
+	//Return:
+	//		Factory - the factory that is owned by the player, null
+	//				  if no factory was found
+	//----------------------------------------------------------
+	public Factory GetOwningFactory(Player p){
+		foreach(Factory f in factoryList){
+			if(f.owningPlayer == p){
+				return f;
+			}
+		}
+
+		Debug.LogError (string.Format ("{0} does not own a factory!", p.transform.name));
+		return null;
+	}
+
+	//----------------------------------------------------------
+	//GetOpposingFactory()
+	//Gets the factory not owned by the player
+	//Param:
+	//		Player p - the player to check
+	//Return:
+	//		Factory - the factory that is owned by the player, null
+	//				  if no factory was found
+	//----------------------------------------------------------
 	public Factory GetOpposingFactory(Player p) {
 		foreach (Factory f in factoryList) {
 			if(f.owningPlayer != p) {
@@ -54,6 +83,7 @@ public class GameController : Singleton<GameController> {
 			}
 		}
 
+		Debug.LogError (string.Format ("No opposing factory found for {0}", p.transform.name));
 		return null;
 	}
 

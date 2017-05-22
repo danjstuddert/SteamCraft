@@ -12,13 +12,18 @@ public class Factory : MonoBehaviour {
 	public int maxBotNumber;
 	//botSpawnTime is the time it takes to spawn a bot
 	public float botSpawnTime;
-	//The player that owns this factory
+	//owningPlayer is the player that owns this factory
 	public Player owningPlayer;
+	//botParent is the object to parent the spawned bots to
+	public Transform botParent;
 
 	//spawnLocations is a list of all of our spawn locations
-	private List<Vector3> spawnLocations;
+	private List<SpawnPoint> spawnLocations;
 	//currentBots is a list of all of our current bots
 	private List<Bot> currentBots;
+	//spawnCount is used as a counter to compare botSpawnTime against
+	private float spawnCount;
+
 
 	//----------------------------------------------------------
 	//Init()
@@ -32,11 +37,13 @@ public class Factory : MonoBehaviour {
 		if(transform.childCount > 0) {
 			//Make sure our spawn location list is initialised
 			if(spawnLocations == null){
-				spawnLocations = new List<Vector3> ();		
+				spawnLocations = new List<SpawnPoint> ();		
 			}
-
+				
 			for (int i = 0; i < transform.childCount; i++) {
-				spawnLocations.Add (transform.GetChild (i).position);
+				if(transform.GetChild(i).GetComponent<SpawnPoint>()){
+					spawnLocations.Add (transform.GetChild (i).GetComponent<SpawnPoint>());	
+				}
 			}
 		} else {
 			Debug.LogError (string.Format ("{0} requires locations for spawn points but none were found!", name));
@@ -54,6 +61,10 @@ public class Factory : MonoBehaviour {
 				break;
 			}
 		}
+	}
+
+	void Update(){
+		CheckSpawn ();
 	}
 
 	//----------------------------------------------------------
@@ -85,6 +96,25 @@ public class Factory : MonoBehaviour {
 	}
 
 	//----------------------------------------------------------
+	//CheckSpawn()
+	//Checks if it is time to spawn a drone
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	private void CheckSpawn(){
+		if(spawnCount <= botSpawnTime){
+			spawnCount += Time.deltaTime;
+		}
+
+		if(currentBots.Count < maxBotNumber && spawnCount >= botSpawnTime){
+			//If we can spawn a drone do it and reset spawnCount
+			if(SpawnDrone()){
+				spawnCount = 0f;
+			}
+		}
+	}
+
+	//----------------------------------------------------------
 	//SpawnDrone()
 	//Spawns a drone at a given location and adds it to the 
 	//current bot list.
@@ -99,9 +129,11 @@ public class Factory : MonoBehaviour {
 		bool locationFound = false;
 
 		for (int i = 0; i < spawnLocations.Count; i++) {
-			location = spawnLocations [i];
+			SpawnPoint s = spawnLocations [i];
+			location = spawnLocations [i].transform.position;
 
-			if(SpawnLocationEmpty(location)){
+			if(SpawnLocationEmpty(s)){
+				s.SetOccupied ();
 				locationFound = true;
 				break;
 			}
@@ -110,10 +142,8 @@ public class Factory : MonoBehaviour {
 		//If we found a location spawn a Bot there, add it to the
 		//current bot list and return true
 		if(locationFound){
-			Bot b = SimplePool.Spawn (BotLibrary.Instance.GetBotByType(droneString),
-				location,
-				Quaternion.identity).GetComponent<Bot>();
-
+			Bot b = SimplePool.Spawn (BotLibrary.Instance.GetBotByType(droneString), location, Quaternion.identity).GetComponent<Bot>();
+			b.transform.SetParent (botParent);
 			b.Init (this);
 			currentBots.Add (b);
 			return true;
@@ -127,17 +157,11 @@ public class Factory : MonoBehaviour {
 	//SpawnLocationEmpty()
 	//Spawns a drone at a random spawnLocation and adds it to the 
 	//Param:
-	//		Vector3 location - the location to check
+	//		SpawnPoint point - the spawn point to check
 	//Return:
 	//		Void
 	//----------------------------------------------------------
-	private bool SpawnLocationEmpty(Vector3 location) {
-		foreach(Bot b in currentBots){
-			if(b.transform.position == location){
-				return false;
-			}
-		}
-
-		return true;
+	private bool SpawnLocationEmpty(SpawnPoint point) {
+		return !point.IsOccupied;
 	}
 }

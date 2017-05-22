@@ -7,7 +7,7 @@ public class UpgradeStation : MonoBehaviour {
 	//The time that it will take to upgrade
 	public float upgradeTime;
 	//The prefab that this station will spawn
-	public GameObject botPrefab;
+	public string botToSpawn;
 	//The location to spawn the upgradedBot
 	public Transform spawnLocation;
 	//The player that owns this upgrade station
@@ -17,6 +17,12 @@ public class UpgradeStation : MonoBehaviour {
 	private int spawnCounter;
 	//A counter for spawning
 	private float upgradeCounter;
+	//The factory object of our team
+	private Factory factory;
+
+	public void Init(){
+		factory = GameController.Instance.GetOwningFactory (owningPlayer);
+	}
 
 	void Update() {
 		if(spawnCounter > 0) {
@@ -42,9 +48,15 @@ public class UpgradeStation : MonoBehaviour {
 		if(upgradeCounter <= upgradeTime) {
 			upgradeCounter += Time.deltaTime;
 		} else {
-			Bot b = SimplePool.Spawn(botPrefab, spawnLocation.position, botPrefab.transform.rotation).GetComponent<Bot>();
+			//Spawn the bot
+			Bot b = SimplePool.Spawn(BotLibrary.Instance.GetBotByType(botToSpawn), spawnLocation.position, Quaternion.identity).GetComponent<Bot>();
 			b.GiveTarget(GameController.Instance.GetOpposingFactory(owningPlayer).transform);
+			 
 			upgradeCounter = 0f;
+			spawnCounter--;
+
+			//Make sure we tell the factory that we have spawned something
+			factory.AddBot (b);
 		}
 	}
 
