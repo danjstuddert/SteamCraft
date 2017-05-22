@@ -57,6 +57,11 @@ public abstract class Bot : MonoBehaviour {
 	}
 
 	protected virtual void OnTriggerEnter(Collider other){
+		//If we were touched by our call circle start following the player
+		if(other.tag == "CallCircle" && other.GetComponent<CallCircle>().owningPlayer == OwningPlayer) {
+			movement.GiveTarget(OwningPlayer.transform);
+		}
+
 		//If we entered an upgrade station and it is owned by our player enter it
 		if(other.tag == "UpgradeStation" && other.GetComponent<UpgradeStation>().owningPlayer == OwningPlayer) {
 			EnterUpgradeStation (other.GetComponent<UpgradeStation>());

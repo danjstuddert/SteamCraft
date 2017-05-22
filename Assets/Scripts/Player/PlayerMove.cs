@@ -35,7 +35,6 @@ public class PlayerMove : MonoBehaviour {
 
 	void Update () {
 		UpdateMoveVelocity();
-		RotatePlayer();
 	}
 
 	void FixedUpdate() {
@@ -65,30 +64,6 @@ public class PlayerMove : MonoBehaviour {
 			if (rBody.velocity.magnitude > maxMovementSpeed) {
 				rBody.velocity = rBody.velocity.normalized * maxMovementSpeed;
 			}
-		}
-	}
-
-	//----------------------------------------------------------
-	//RotatePlayer()
-	//Rotates the player using the current input
-	//Return:
-	//		Void
-	//----------------------------------------------------------
-	private void RotatePlayer() {
-		if(XCI.GetAxis(XboxAxis.LeftTrigger, controller) == 0){
-			Vector3 directionVector = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0f, XCI.GetAxis(XboxAxis.RightStickY, controller));
-
-			//If the right thumbstick is not being used, make sure we stay facing the previous direction
-			if(directionVector.magnitude < 0.1f) {
-				directionVector = previousRotationDirection;
-			}
-
-			directionVector = directionVector.normalized;
-			previousRotationDirection = directionVector;
-
-			Vector3 newDirection = Vector3.RotateTowards(transform.forward, directionVector, rotationSpeed * Time.deltaTime, 0f);
-
-			transform.rotation = Quaternion.LookRotation(newDirection);	
 		}
 	}
 }

@@ -5,7 +5,7 @@ using XboxCtrlrInput;
 
 //A script that handles all of the player components
 [RequireComponent(typeof(PlayerMove))]
-[RequireComponent(typeof(PlayerCommand))]
+//[RequireComponent(typeof(PlayerCommand))]
 [RequireComponent(typeof(PlayerCall))]
 public class Player : MonoBehaviour {
 	//The controller that controls the object
@@ -14,7 +14,7 @@ public class Player : MonoBehaviour {
 	//The player's movement script
 	private PlayerMove move;
 	//The player's command script
-	private PlayerCommand command;
+	//private PlayerCommand command;
 	//The player's call script
 	private PlayerCall call;
 
@@ -28,8 +28,8 @@ public class Player : MonoBehaviour {
 		move = GetComponent<PlayerMove>();
 		move.Init(controller);
 
-		command = GetComponent<PlayerCommand> ();
-		command.Init (controller);
+		//command = GetComponent<PlayerCommand> ();
+		//command.Init (controller);
 
 		call = GetComponent<PlayerCall> ();
 		call.Init (controller);
