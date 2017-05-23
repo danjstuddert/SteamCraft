@@ -14,9 +14,11 @@ public class Player : MonoBehaviour {
 	//The player's movement script
 	private PlayerMove move;
 	//The player's command script
-	//private PlayerCommand command;
+	private PlayerCommand command;
 	//The player's call script
 	private PlayerCall call;
+	//controlledBots is the list of currently controlled bots
+	private List<Bot> controlledBots;
 
 	//----------------------------------------------------------
 	//Init()
@@ -28,10 +30,14 @@ public class Player : MonoBehaviour {
 		move = GetComponent<PlayerMove>();
 		move.Init(controller);
 
-		//command = GetComponent<PlayerCommand> ();
-		//command.Init (controller);
+		command = GetComponent<PlayerCommand> ();
+		command.Init (controller);
 
 		call = GetComponent<PlayerCall> ();
 		call.Init (controller);
+
+		if(controlledBots == null){
+			controlledBots = new List<Bot> ();
+		}
 	}
 }

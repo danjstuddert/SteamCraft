@@ -16,9 +16,13 @@ public class Factory : MonoBehaviour {
 	public Player owningPlayer;
 	//botParent is the object to parent the spawned bots to
 	public Transform botParent;
+	//pointCheckRadius is the radius of the overlapsphere when checking points
+	public float pointCheckRadius;
+	//droneLayer is the layer the drones are on
+	public LayerMask droneLayer;
 
 	//spawnLocations is a list of all of our spawn locations
-	private List<SpawnPoint> spawnLocations;
+	private List<Vector3> spawnLocations;
 	//currentBots is a list of all of our current bots
 	private List<Bot> currentBots;
 	//spawnCount is used as a counter to compare botSpawnTime against
@@ -37,13 +41,11 @@ public class Factory : MonoBehaviour {
 		if(transform.childCount > 0) {
 			//Make sure our spawn location list is initialised
 			if(spawnLocations == null){
-				spawnLocations = new List<SpawnPoint> ();		
+				spawnLocations = new List<Vector3> ();		
 			}
 				
 			for (int i = 0; i < transform.childCount; i++) {
-				if(transform.GetChild(i).GetComponent<SpawnPoint>()){
-					spawnLocations.Add (transform.GetChild (i).GetComponent<SpawnPoint>());	
-				}
+				spawnLocations.Add (transform.GetChild (i).position);
 			}
 		} else {
 			Debug.LogError (string.Format ("{0} requires locations for spawn points but none were found!", name));
@@ -111,6 +113,7 @@ public class Factory : MonoBehaviour {
 			if(SpawnDrone()){
 				spawnCount = 0f;
 			}
+
 		}
 	}
 
@@ -124,29 +127,18 @@ public class Factory : MonoBehaviour {
 	//		bool - If placement was successful
 	//----------------------------------------------------------
 	private bool SpawnDrone() {
-		//Go through the spawn locations until we find a free one
-		Vector3 location = Vector3.zero;
-		bool locationFound = false;
-
 		for (int i = 0; i < spawnLocations.Count; i++) {
-			SpawnPoint s = spawnLocations [i];
-			location = spawnLocations [i].transform.position;
+			Vector3 location = spawnLocations [i];
 
-			if(SpawnLocationEmpty(s)){
-				s.SetOccupied ();
-				locationFound = true;
-				break;
+			if(SpawnLocationOccupied(location) == false) {
+				Bot bot = SimplePool.Spawn (BotLibrary.Instance.GetBotByType(droneString), location, Quaternion.identity).GetComponent<Bot>();
+
+				bot.transform.SetParent (botParent);
+				bot.Init (this);
+
+				currentBots.Add (bot);
+				return true;
 			}
-		}
-
-		//If we found a location spawn a Bot there, add it to the
-		//current bot list and return true
-		if(locationFound){
-			Bot b = SimplePool.Spawn (BotLibrary.Instance.GetBotByType(droneString), location, Quaternion.identity).GetComponent<Bot>();
-			b.transform.SetParent (botParent);
-			b.Init (this);
-			currentBots.Add (b);
-			return true;
 		}
 
 		//If we could not find an empty location return false
@@ -161,7 +153,8 @@ public class Factory : MonoBehaviour {
 	//Return:
 	//		Void
 	//----------------------------------------------------------
-	private bool SpawnLocationEmpty(SpawnPoint point) {
-		return !point.IsOccupied;
+	private bool SpawnLocationOccupied(Vector3 point) {
+		Collider[] hitColliders = Physics.OverlapSphere (point, pointCheckRadius, droneLayer);
+		return hitColliders.Length > 0 ? true : false;
 	}
 }

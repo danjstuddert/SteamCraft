@@ -34,12 +34,13 @@ public class PlayerCall : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	private void CheckCircleActive() {
-		if (XCI.GetAxis(XboxAxis.LeftTrigger, controller) != 0 && callCircle.activeInHierarchy == false) {
+		if (XCI.GetAxis(XboxAxis.RightTrigger, controller) != 0 && callCircle.activeInHierarchy == false && 
+			XCI.GetAxis(XboxAxis.LeftTrigger, controller) == 0 ) {
 			callCircle.transform.position = transform.position;
 			callCircle.SetActive(true);
 		}
 
-		else if (XCI.GetAxis(XboxAxis.LeftTrigger, controller) == 0 && callCircle.activeInHierarchy) {
+		else if (XCI.GetAxis(XboxAxis.RightTrigger, controller) == 0 && callCircle.activeInHierarchy) {
 			callCircle.SetActive(false);
 		}
 	}

@@ -18,8 +18,6 @@ public class PlayerMove : MonoBehaviour {
 	private Rigidbody rBody;
 	//The velocity to apply every fixed update
 	private Vector3 moveVelocity;
-	//The rotation of the player on the previous frame
-	private Vector3 previousRotationDirection;
 
 	//----------------------------------------------------------
 	//Init()
@@ -29,7 +27,6 @@ public class PlayerMove : MonoBehaviour {
 	//----------------------------------------------------------
 	public void Init (XboxController controller) {
 		rBody = GetComponent<Rigidbody>();
-		previousRotationDirection = Vector3.forward;
 		this.controller = controller;
 	}
 

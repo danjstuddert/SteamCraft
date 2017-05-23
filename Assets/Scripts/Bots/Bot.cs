@@ -42,6 +42,17 @@ public abstract class Bot : MonoBehaviour {
 	}
 
 	//----------------------------------------------------------
+	//HasTarget()
+	//Checks the movement script to see if the bot currently
+	//has a target
+	//Return:
+	//		Bool - True if the bot has a target, false otherwise
+	//----------------------------------------------------------
+	public bool HasTarget(){
+		return movement.HasTarget ();
+	}
+
+	//----------------------------------------------------------
 	//EnterUpgradeStation()
 	//Tells the given station to spawn its upgrade and handles despawning
 	//of this bot

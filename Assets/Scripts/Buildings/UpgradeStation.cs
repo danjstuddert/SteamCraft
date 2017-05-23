@@ -60,5 +60,9 @@ public class UpgradeStation : MonoBehaviour {
 		}
 	}
 
-
+	void OnTriggerEnter(Collider other){
+		if(other.tag == "CommandTarget" && other.GetComponentInParent<Player>() == owningPlayer){
+			//other.GetComponentInParent<Player>().
+		}
+	}
 }

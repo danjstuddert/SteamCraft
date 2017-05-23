@@ -47,6 +47,10 @@ public class BotMove : MonoBehaviour {
 		movementMode = MovementMode.MoveToPoint;
 	}
 
+	public bool HasTarget(){
+		return currentTarget != null ? true : false;
+	}
+
 	//----------------------------------------------------------
 	//HandleMove()
 	//Updates the bot's movement
