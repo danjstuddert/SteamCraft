@@ -10,12 +10,13 @@ public class BotMove : MonoBehaviour {
 	//The movement mode that the bot starts in
 	public MovementMode startingMovementMode;
 
+	//The current target of the bot
+	public Transform CurrentTarget { get; private set; }
+
 	//The navMeshAgent of this object
 	private NavMeshAgent navMeshAgent;
 	//The current movementMode of the bot
 	private MovementMode movementMode;
-	//The current target of the bot
-	private Transform currentTarget;
 
 	//----------------------------------------------------------
 	//Init()
@@ -43,12 +44,12 @@ public class BotMove : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	public void GiveTarget(Transform target) {
-		currentTarget = target;
+		CurrentTarget = target;
 		movementMode = MovementMode.MoveToPoint;
 	}
 
 	public bool HasTarget(){
-		return currentTarget != null ? true : false;
+		return CurrentTarget != null ? true : false;
 	}
 
 	//----------------------------------------------------------
@@ -76,8 +77,8 @@ public class BotMove : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	private void MoveToPoint() {
-		if(currentTarget != null && currentTarget.position != navMeshAgent.destination) {
-			navMeshAgent.destination = currentTarget.position;
+		if(CurrentTarget != null && CurrentTarget.position != navMeshAgent.destination) {
+			navMeshAgent.destination = CurrentTarget.position;
 		}
 	}
 }

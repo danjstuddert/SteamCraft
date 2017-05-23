@@ -17,6 +17,11 @@ public class GameController : Singleton<GameController> {
 			f.Init ();
 		}
 
+		//Make sure we initalise all of the upgrade stations correctly
+		foreach (UpgradeStation station in FindObjectsOfType(typeof(UpgradeStation))) {
+			station.Init();
+		}
+
 		PlayerController.Instance.Init();
 	}
 
@@ -34,6 +39,9 @@ public class GameController : Singleton<GameController> {
 				PlayerController.Instance.PlayerDead(obj);
 				break;
 			case "Bot":
+				DespawnBot(obj.GetComponent<Bot>());
+				break;
+			case "Drone":
 				DespawnBot(obj.GetComponent<Bot>());
 				break;
 			case "Factory":

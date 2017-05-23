@@ -17,8 +17,7 @@ public class Player : MonoBehaviour {
 	private PlayerCommand command;
 	//The player's call script
 	private PlayerCall call;
-	//controlledBots is the list of currently controlled bots
-	private List<Bot> controlledBots;
+
 
 	//----------------------------------------------------------
 	//Init()
@@ -35,9 +34,43 @@ public class Player : MonoBehaviour {
 
 		call = GetComponent<PlayerCall> ();
 		call.Init (controller);
+	}
 
-		if(controlledBots == null){
-			controlledBots = new List<Bot> ();
-		}
+	//----------------------------------------------------------
+	//GiveUpgradeStation()
+	//Gives the player a station to store for use on trigger release
+	//Params:
+	//		UpgradeStation station - The station to send
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public void GiveUpgradeStation(UpgradeStation station) {
+		command.GiveUpgradeStation(station);
+	}
+
+	//----------------------------------------------------------
+	//RemoveUpgradeStation()
+	//Passes the command script of this object to remove from its
+	//stored station
+	//Params:
+	//		UpgradeStation station - The station to send
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public void RemoveUpgradeStation(UpgradeStation station) {
+		command.RemoveUpgradeStation(station);
+	}
+
+	//----------------------------------------------------------
+	//GiveBot()
+	//Gives the bot that just started following the player to the
+	//command script ascociated with this player
+	//Params:
+	//		Bot bot - The bot to store
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public void GiveBot(Bot bot) {
+		command.GiveBot(bot);
 	}
 }

@@ -7,7 +7,7 @@ public class UpgradeStation : MonoBehaviour {
 	//The time that it will take to upgrade
 	public float upgradeTime;
 	//The prefab that this station will spawn
-	public string botToSpawn;
+	public GameObject botToSpawn;
 	//The location to spawn the upgradedBot
 	public Transform spawnLocation;
 	//The player that owns this upgrade station
@@ -49,9 +49,9 @@ public class UpgradeStation : MonoBehaviour {
 			upgradeCounter += Time.deltaTime;
 		} else {
 			//Spawn the bot
-			Bot b = SimplePool.Spawn(BotLibrary.Instance.GetBotByType(botToSpawn), spawnLocation.position, Quaternion.identity).GetComponent<Bot>();
+			Bot b = SimplePool.Spawn(botToSpawn, spawnLocation.position, Quaternion.identity).GetComponent<Bot>();
+			b.Init(factory);
 			b.GiveTarget(GameController.Instance.GetOpposingFactory(owningPlayer).transform);
-			 
 			upgradeCounter = 0f;
 			spawnCounter--;
 
@@ -62,7 +62,13 @@ public class UpgradeStation : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other){
 		if(other.tag == "CommandTarget" && other.GetComponentInParent<Player>() == owningPlayer){
-			//other.GetComponentInParent<Player>().
+			other.GetComponentInParent<Player>().GiveUpgradeStation(this);
+		}
+	}
+
+	void OnTriggerExit(Collider other) {
+		if(other.tag == "CommandTarget" && other.GetComponentInParent<Player>() == owningPlayer) {
+			other.GetComponentInParent<Player>().RemoveUpgradeStation(this);
 		}
 	}
 }
