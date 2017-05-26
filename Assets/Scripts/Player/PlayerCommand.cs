@@ -129,6 +129,10 @@ public class PlayerCommand : MonoBehaviour {
 					break;
 				}
 			}
+
+			//make sure we reset the selected station to null to prevent Drones moving
+			//to the same station the next time a command is issued to any point on the map
+			selectedStation = null;
 		}
 
 		else {

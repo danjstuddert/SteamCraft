@@ -9,6 +9,8 @@ public enum MovementMode {Stay, MoveToPoint}
 public class BotMove : MonoBehaviour {
 	//The movement mode that the bot starts in
 	public MovementMode startingMovementMode;
+	//The closest that this bot can get to its target
+	public float minDistanceToTarget;
 
 	//The current target of the bot
 	public Transform CurrentTarget { get; private set; }
@@ -77,8 +79,12 @@ public class BotMove : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	private void MoveToPoint() {
-		if(CurrentTarget != null && CurrentTarget.position != navMeshAgent.destination) {
-			navMeshAgent.destination = CurrentTarget.position;
+		if(CurrentTarget != null) {
+			if(Vector3.Distance(transform.position, CurrentTarget.position) > minDistanceToTarget || CurrentTarget.tag == "UpgradeStation"){
+				navMeshAgent.destination = CurrentTarget.position;
+			} else {
+				navMeshAgent.destination = transform.position;
+			}
 		}
 	}
 }
