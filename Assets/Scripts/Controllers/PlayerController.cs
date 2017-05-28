@@ -21,7 +21,10 @@ public class PlayerController : Singleton<PlayerController> {
 
 		foreach(GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
 			Player p = player.GetComponent<Player>();
-			p.Init();
+			if(p != null) {
+				p.Init();
+			}
+			
 			players.Add(p);
 		}
 	}

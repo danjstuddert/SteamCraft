@@ -12,6 +12,8 @@ public abstract class Bot : MonoBehaviour {
 
 	//The BotMovement script for this particular bot
 	protected BotMove movement;
+	//attack is the player's attack script
+	protected BotAttack attack;
 
 	//----------------------------------------------------------
 	//Init()
@@ -27,6 +29,11 @@ public abstract class Bot : MonoBehaviour {
 
 		movement = GetComponent<BotMove>();
 		movement.Init(this);
+
+		if (GetComponent<BotAttack>() != null) {
+			attack = GetComponent<BotAttack>();
+			attack.Init(this);
+		}
 	}
 
 	//----------------------------------------------------------

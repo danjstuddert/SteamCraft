@@ -11,6 +11,10 @@ public class BotMove : MonoBehaviour {
 	public MovementMode startingMovementMode;
 	//minDistanceToTarget is the closest that this bot can get to its target
 	public float minDistanceToTarget;
+	//detectionRadius is the radius to check for target detection
+	public float detectionRadius;
+	//detectionLayer is the layermask to use for detection raycasts
+	public LayerMask detectionLayer;
 
 	//CurrentTarget is the current target of the bot
 	public Transform CurrentTarget { get; private set; }
@@ -21,7 +25,7 @@ public class BotMove : MonoBehaviour {
 	private NavMeshAgent navMeshAgent;
 	//movementMode is the current movementMode of the bot
 	private MovementMode movementMode;
-	//
+	//bot is the bot script attached to this object
 	private Bot bot;
 
 	//----------------------------------------------------------
@@ -39,6 +43,7 @@ public class BotMove : MonoBehaviour {
 	}
 
 	void Update () {
+		DetectHostile();
 		HandleMove();		
 	}
 
@@ -77,6 +82,61 @@ public class BotMove : MonoBehaviour {
 	//----------------------------------------------------------
 	public bool HasTarget(){
 		return CurrentTarget != null ? true : false;
+	}
+
+	//----------------------------------------------------------
+	//DetectHostile()
+	//Detects if a hostile unit is within range and will change target
+	//if one is found
+	//Return:
+	//		Void
+	private void DetectHostile() {
+		//If we are following our player or our movement mode is stay don't do anything
+		if (CurrentTarget == bot.OwningPlayer || movementMode == MovementMode.Stay) {
+			return;
+		}
+
+		Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
+
+		//Attack priority is as follows: Player, Bot, Drone, Factory
+		Transform target = null;
+		for (int i = 0; i < hitColliders.Length; i++) {
+			Debug.Log(hitColliders[i].tag);
+
+			//If we found the enemy player we can just break since it is our highest priority target
+			if (hitColliders[i].tag == "Player" && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
+				target = hitColliders[i].transform;
+				break;
+			}
+
+			if (hitColliders[i].tag == "Bot" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
+				//if the target we have is not a bot assign the current hitCollider to the target
+				//and continue
+				if(hitColliders[i].GetComponent<Bot>() == null) {
+					target = hitColliders[i].transform;
+					continue;
+				}
+
+				target = CheckTargetPriority(hitColliders[i].transform, target);
+				continue;
+			} else if (hitColliders[i].tag == "Drone" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
+				target = CheckTargetPriority(hitColliders[i].transform, target);
+				continue;
+			} else if (hitColliders[i].tag == "Factory" && hitColliders[i].GetComponent<Factory>().owningPlayer != bot.OwningPlayer) {
+				target = CheckTargetPriority(hitColliders[i].transform, target);
+				continue;
+			}
+		}
+
+		if(target != null) {
+			CurrentTarget = target;
+		}
+
+		//If we are moving to a point make sure we update our movement type to that
+		//of a target if we now have one
+		if (CurrentTarget != null && movementMode == MovementMode.MoveToPoint) {
+			movementMode = MovementMode.MoveToTarget;
+		}
 	}
 
 	//----------------------------------------------------------
@@ -135,5 +195,23 @@ public class BotMove : MonoBehaviour {
 				movementMode = MovementMode.MoveToTarget;
 			}
 		}
+	}
+
+	//----------------------------------------------------------
+	//CheckTargetPriority()
+	//Checks to see if the given target is a higher priorty than the current target
+	//Params:
+	//		Transform targetToCheck - the target to check
+	//		Transform currentTarget - the target to check against
+	//Return:
+	//		Transform - the closer target
+	//----------------------------------------------------------
+	private Transform CheckTargetPriority(Transform targetToCheck, Transform currentTarget) {
+		if (currentTarget == null || Vector3.Distance(transform.position, targetToCheck.transform.position) < 
+			Vector3.Distance(transform.position, currentTarget.position)) {
+			return targetToCheck;
+		}
+
+		return currentTarget;
 	}
 }

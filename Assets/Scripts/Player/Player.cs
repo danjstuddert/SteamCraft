@@ -11,11 +11,11 @@ public class Player : MonoBehaviour {
 	//The controller that controls the object
 	public XboxController controller;
 
-	//The player's movement script
+	//move is the player's movement script
 	private PlayerMove move;
-	//The player's command script
+	//command is thee player's command script
 	private PlayerCommand command;
-	//The player's call script
+	//call is the player's call script
 	private PlayerCall call;
 
 
