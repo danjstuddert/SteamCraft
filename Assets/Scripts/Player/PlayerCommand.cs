@@ -120,7 +120,8 @@ public class PlayerCommand : MonoBehaviour {
 	}
 
 	private void ProcessCommand(){
-		if(selectedStation != null){
+		//If there is a Drone and an Upgrade Station was selected, send a Drone to the Upgrade Station
+		if (selectedStation != null){
 			//Get the first drone we can and send it to the station
 			for (int i = 0; i < controlledBots.Count; i++) {
 				if(controlledBots[i].tag == "Drone") {
@@ -133,10 +134,30 @@ public class PlayerCommand : MonoBehaviour {
 			//make sure we reset the selected station to null to prevent Drones moving
 			//to the same station the next time a command is issued to any point on the map
 			selectedStation = null;
+		} else {
+			//If there is an Upgraded Bot and a point on the map was selected send it to the lane nearest the point
+			bool foundUpgraded = false;
+			for (int i = 0; i < controlledBots.Count; i++) {
+				if(controlledBots[i].tag == "Bot") {
+					controlledBots[i].GivePoint(commandTarget.transform.position);
+					controlledBots.Remove(controlledBots[i]);
+					foundUpgraded = true;
+					break;
+				}
+			}
+
+			//If there are Dones but no Upgraded Bots send the drone to the clicked point on the map
+			if(foundUpgraded == false) {
+				for (int i = 0; i < controlledBots.Count; i++) {
+					if (controlledBots[i].tag == "Drone") {
+						controlledBots[i].GivePoint(commandTarget.transform.position);
+						controlledBots.Remove(controlledBots[i]);
+						break;
+					}
+				}
+			}
 		}
 
-		else {
-
-		}
+		//If there are no Bots following the player just do nothing
 	}
 }

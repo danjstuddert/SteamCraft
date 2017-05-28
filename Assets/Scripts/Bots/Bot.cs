@@ -26,7 +26,7 @@ public abstract class Bot : MonoBehaviour {
 		OwningPlayer = homeFactory.owningPlayer;
 
 		movement = GetComponent<BotMove>();
-		movement.Init();
+		movement.Init(this);
 	}
 
 	//----------------------------------------------------------
@@ -39,6 +39,18 @@ public abstract class Bot : MonoBehaviour {
 	//----------------------------------------------------------
 	public virtual void GiveTarget(Transform target) {
 		movement.GiveTarget(target);
+	}
+
+	//----------------------------------------------------------
+	//GiveTarget()
+	//Gives a point to the attached movement script
+	//Param:
+	//		Vector3 point - the target to give the movement script
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public virtual void GivePoint(Vector3 point) {
+		movement.GivePoint(point);
 	}
 
 	//----------------------------------------------------------
