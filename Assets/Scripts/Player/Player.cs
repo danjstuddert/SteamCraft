@@ -34,6 +34,8 @@ public class Player : MonoBehaviour {
 
 		call = GetComponent<PlayerCall> ();
 		call.Init (controller);
+
+		GetComponent<Health> ().Init ();
 	}
 
 	//----------------------------------------------------------

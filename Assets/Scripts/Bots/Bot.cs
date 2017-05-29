@@ -6,9 +6,11 @@ using UnityEngine;
 [RequireComponent(typeof(BotMove))]
 public abstract class Bot : MonoBehaviour {
 	//homeFactory is the factory that this bot was spawned from
-	public Factory HomeFactory {get;private set;}
+	public Factory HomeFactory {get; private set;}
 	//OwningPlayer is the player that owns the bot
 	public Player OwningPlayer { get; private set; }
+	//CurrentTarget is the current target of the bot
+	public Transform CurrentTarget { get { return movement.CurrentTarget; }}
 
 	//The BotMovement script for this particular bot
 	protected BotMove movement;
@@ -34,6 +36,8 @@ public abstract class Bot : MonoBehaviour {
 			attack = GetComponent<BotAttack>();
 			attack.Init(this);
 		}
+
+		GetComponent<Health> ().Init ();
 	}
 
 	//----------------------------------------------------------

@@ -4,14 +4,16 @@ using UnityEngine;
 
 //Handles the upgrading of Bots
 public class UpgradeStation : MonoBehaviour {
-	//The time that it will take to upgrade
+	//upgradeTime is the time that it will take to upgrade
 	public float upgradeTime;
-	//The prefab that this station will spawn
+	//botToSpawn is the prefab that this station will spawn
 	public GameObject botToSpawn;
-	//The location to spawn the upgradedBot
+	//spawnLocation is the location to spawn the upgradedBot
 	public Transform spawnLocation;
-	//The player that owns this upgrade station
+	//owningPlayer is the player that owns this upgrade station
 	public Player owningPlayer;
+	//botParent is the object to parent spawned bots to
+	public Transform botParent;
 
 	//The number of items to left to spawn
 	private int spawnCounter;
@@ -52,6 +54,7 @@ public class UpgradeStation : MonoBehaviour {
 			Bot b = SimplePool.Spawn(botToSpawn, spawnLocation.position, Quaternion.identity).GetComponent<Bot>();
 			b.Init(factory);
 			b.GiveTarget(GameController.Instance.GetOpposingFactory(owningPlayer).transform);
+			b.transform.SetParent (botParent);
 			upgradeCounter = 0f;
 			spawnCounter--;
 

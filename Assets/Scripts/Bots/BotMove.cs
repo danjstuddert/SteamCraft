@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+//An enumerator used to determine current movement state of individual bots
 public enum MovementMode {Stay, MoveToTarget, MoveToPoint}
 
+//A class that handles the movement of bots
 [RequireComponent(typeof(NavMeshAgent))]
 public class BotMove : MonoBehaviour {
 	//startingMovementMode is the movement mode that the bot starts in
@@ -101,8 +103,6 @@ public class BotMove : MonoBehaviour {
 		//Attack priority is as follows: Player, Bot, Drone, Factory
 		Transform target = null;
 		for (int i = 0; i < hitColliders.Length; i++) {
-			Debug.Log(hitColliders[i].tag);
-
 			//If we found the enemy player we can just break since it is our highest priority target
 			if (hitColliders[i].tag == "Player" && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
 				target = hitColliders[i].transform;
@@ -148,6 +148,12 @@ public class BotMove : MonoBehaviour {
 	private void HandleMove() {
 		switch (movementMode) {
 			case MovementMode.MoveToTarget:
+				if(CurrentTarget == null){
+					targetPoint = transform.position;
+					movementMode = MovementMode.MoveToPoint;
+					break;
+				}
+
 				MoveToPoint(CurrentTarget.position);
 				break;
 			case MovementMode.MoveToPoint:

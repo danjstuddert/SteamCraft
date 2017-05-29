@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//A base class that handles bot attacking
 public abstract class BotAttack : MonoBehaviour {
 	//attackDamage is the damage inflicted with each attack
 	public int attackDamage;
@@ -13,6 +14,9 @@ public abstract class BotAttack : MonoBehaviour {
 	//bot is the bot script attached to this object
 	protected Bot bot;
 
+	//attackCount is a timer to use when checking to see if the bot can attack
+	private float attackCount;
+
 	//----------------------------------------------------------
 	//Init()
 	//Ensures the BotAttack script is setup correctly
@@ -23,5 +27,48 @@ public abstract class BotAttack : MonoBehaviour {
 	//----------------------------------------------------------
 	public virtual void Init(Bot bot) {
 		this.bot = bot;
+
+		//Set attack count to attack rate so we can attack right out of the gate
+		//if we are within range
+		attackCount = attackRate;
+	}
+
+	void Update(){
+		CheckAttack ();
+	}
+
+	//----------------------------------------------------------
+	//CheckAttack()
+	//Checks to see if this bot should attack
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	private void CheckAttack(){
+		if(bot.CurrentTarget == null){
+			return;
+		}
+
+		if(Vector3.Distance(transform.position, bot.CurrentTarget.position) <= attackRange){
+			if(attackCount >= attackRate) {
+				ApplyDamage ();
+				attackCount = 0f;
+			} else {
+				attackCount += Time.deltaTime;
+			}
+		}
+	}
+
+	//----------------------------------------------------------
+	//ApplyDamage()
+	//Applies damage to the current target
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	protected virtual void ApplyDamage(){
+		Health targetHealth = bot.CurrentTarget.GetComponent<Health> ();
+
+		if(targetHealth){
+			targetHealth.AdjustHealth (-attackDamage);
+		}
 	}
 }

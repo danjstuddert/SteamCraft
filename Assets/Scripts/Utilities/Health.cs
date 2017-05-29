@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//Handles the health of an object
 public class Health : MonoBehaviour {
 	//The starting amount of health an object has
 	public int startingHealth;
