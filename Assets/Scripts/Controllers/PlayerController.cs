@@ -6,6 +6,10 @@ public enum Faction { Red, Blue }
 
 //A script that manages the instances of player objects in the game
 public class PlayerController : Singleton<PlayerController> {
+	public float playerRespawnTime;
+	public Transform redSpawnPoint;
+	public Transform blueSpawnPoint;
+
 	private List<Player> players;
 
 	//----------------------------------------------------------
@@ -19,13 +23,10 @@ public class PlayerController : Singleton<PlayerController> {
 	public void Init() {
 		players = new List<Player>();
 
-		foreach(GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
-			Player p = player.GetComponent<Player>();
-			if(p != null) {
-				p.Init();
-			}
-			
-			players.Add(p);
+		foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
+			Player p = player.GetComponent<Player> ();
+			p.Init ();
+			players.Add (p);
 		}
 	}
 
@@ -40,9 +41,30 @@ public class PlayerController : Singleton<PlayerController> {
 		Player playerScript = player.GetComponent<Player>();
 
 		if(players.Exists(p => p == playerScript)) {
+			players.Remove (playerScript);
+			playerScript.gameObject.SetActive (false);
+			StartCoroutine (RespawnPlayer(playerScript));
 
 		} else {
 			Debug.LogError(string.Format("{0} is not a recognised player!", player.name));
 		} 
+	}
+
+	//----------------------------------------------------------
+	//RespawnPlayer()
+	//respawns a player to their given point
+	//Params:
+	//		Player player - the player to respawn
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	private IEnumerator RespawnPlayer(Player player){
+		yield return new WaitForSeconds (playerRespawnTime);
+
+		player.gameObject.SetActive (true);
+
+		player.Init ();
+		players.Add (player);
+		player.transform.position = player.name == "PlayerBlue" ? blueSpawnPoint.position : redSpawnPoint.position;
 	}
 }

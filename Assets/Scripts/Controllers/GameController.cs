@@ -50,9 +50,6 @@ public class GameController : Singleton<GameController> {
 				Debug.LogError (string.Format("{0} does not contain a health script but despawn was requested", obj.name));
 				break;
 		}
-
-		//Despawn the object using the object pooling script
-		SimplePool.Despawn (obj);	
 	}
 
 	//----------------------------------------------------------
@@ -105,6 +102,7 @@ public class GameController : Singleton<GameController> {
 	//----------------------------------------------------------
 	private void DespawnBot(Bot bot) {
 		bot.HomeFactory.RemoveBot(bot);
+		SimplePool.Despawn (bot.gameObject);	
 	}
 
 	//----------------------------------------------------------

@@ -17,6 +17,7 @@ public class BotMove : MonoBehaviour {
 	public float detectionRadius;
 	//detectionLayer is the layermask to use for detection raycasts
 	public LayerMask detectionLayer;
+	public Transform tar;
 
 	//CurrentTarget is the current target of the bot
 	public Transform CurrentTarget { get; private set; }
@@ -45,6 +46,7 @@ public class BotMove : MonoBehaviour {
 	}
 
 	void Update () {
+		tar = CurrentTarget;
 		DetectHostile();
 		HandleMove();		
 	}
@@ -120,6 +122,7 @@ public class BotMove : MonoBehaviour {
 				target = CheckTargetPriority(hitColliders[i].transform, target);
 				continue;
 			} else if (hitColliders[i].tag == "Drone" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
+				Debug.Log (hitColliders [i].GetComponent<Bot> ().OwningPlayer);
 				target = CheckTargetPriority(hitColliders[i].transform, target);
 				continue;
 			} else if (hitColliders[i].tag == "Factory" && hitColliders[i].GetComponent<Factory>().owningPlayer != bot.OwningPlayer) {

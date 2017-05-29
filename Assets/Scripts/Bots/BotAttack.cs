@@ -10,6 +10,7 @@ public abstract class BotAttack : MonoBehaviour {
 	public float attackRate;
 	//attackRange is the range that the bot has to be in to attack
 	public float attackRange;
+	public LayerMask attackingMask;
 
 	//bot is the bot script attached to this object
 	protected Bot bot;
@@ -47,15 +48,22 @@ public abstract class BotAttack : MonoBehaviour {
 		if(bot.CurrentTarget == null){
 			return;
 		}
+			
+		RaycastHit hit;
 
-		if(Vector3.Distance(transform.position, bot.CurrentTarget.position) <= attackRange){
-			if(attackCount >= attackRate) {
+		if(Physics.Raycast(transform.position, bot.CurrentTarget.position - transform.position, out hit, attackRange, attackingMask)) {
+			Debug.Log (hit.transform.name);
+			if (hit.transform == bot.CurrentTarget && attackCount >= attackRate){
 				ApplyDamage ();
-				attackCount = 0f;
-			} else {
-				attackCount += Time.deltaTime;
+				attackCount = 0f;	
 			}
 		}
+
+		if (Vector3.Distance (transform.position, bot.CurrentTarget.position) <= attackRange) {
+			
+		}
+
+		attackCount += Time.deltaTime;
 	}
 
 	//----------------------------------------------------------
@@ -69,6 +77,13 @@ public abstract class BotAttack : MonoBehaviour {
 
 		if(targetHealth){
 			targetHealth.AdjustHealth (-attackDamage);
+		}
+	}
+
+	void OnDrawGizmosSelected(){
+		if(bot.CurrentTarget){
+			Gizmos.color = Color.red;
+			Gizmos.DrawRay (transform.position, bot.CurrentTarget.position- transform.position);
 		}
 	}
 }
