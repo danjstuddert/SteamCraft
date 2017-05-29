@@ -106,7 +106,7 @@ public class BotMove : MonoBehaviour {
 		Transform target = null;
 		for (int i = 0; i < hitColliders.Length; i++) {
 			//If we found the enemy player we can just break since it is our highest priority target
-			if (hitColliders[i].tag == "Player" && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
+			if (hitColliders[i].tag == "Player" && hitColliders[i].gameObject.activeInHierarchy && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
 				target = hitColliders[i].transform;
 				break;
 			}
@@ -122,7 +122,6 @@ public class BotMove : MonoBehaviour {
 				target = CheckTargetPriority(hitColliders[i].transform, target);
 				continue;
 			} else if (hitColliders[i].tag == "Drone" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
-				Debug.Log (hitColliders [i].GetComponent<Bot> ().OwningPlayer);
 				target = CheckTargetPriority(hitColliders[i].transform, target);
 				continue;
 			} else if (hitColliders[i].tag == "Factory" && hitColliders[i].GetComponent<Factory>().owningPlayer != bot.OwningPlayer) {
@@ -151,11 +150,10 @@ public class BotMove : MonoBehaviour {
 	private void HandleMove() {
 		switch (movementMode) {
 			case MovementMode.MoveToTarget:
-				if(CurrentTarget == null){
-					targetPoint = transform.position;
-					movementMode = MovementMode.MoveToPoint;
+				if(CurrentTarget.gameObject.activeInHierarchy == false || CurrentTarget == null) {
+					CheckTarget();
 					break;
-				}
+				}	
 
 				MoveToPoint(CurrentTarget.position);
 				break;

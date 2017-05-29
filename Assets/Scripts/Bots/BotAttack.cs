@@ -48,19 +48,10 @@ public abstract class BotAttack : MonoBehaviour {
 		if(bot.CurrentTarget == null){
 			return;
 		}
-			
-		RaycastHit hit;
 
-		if(Physics.Raycast(transform.position, bot.CurrentTarget.position - transform.position, out hit, attackRange, attackingMask)) {
-			Debug.Log (hit.transform.name);
-			if (hit.transform == bot.CurrentTarget && attackCount >= attackRate){
-				ApplyDamage ();
-				attackCount = 0f;	
-			}
-		}
-
-		if (Vector3.Distance (transform.position, bot.CurrentTarget.position) <= attackRange) {
-			
+		if (Vector3.Distance (transform.position, bot.CurrentTarget.position) <= attackRange && attackCount >= attackRate) {
+			ApplyDamage();
+			attackCount = 0f;
 		}
 
 		attackCount += Time.deltaTime;
@@ -73,6 +64,7 @@ public abstract class BotAttack : MonoBehaviour {
 	//		Void
 	//----------------------------------------------------------
 	protected virtual void ApplyDamage(){
+		Debug.Log(string.Format("Apply Damage to {0}", bot.CurrentTarget.name));
 		Health targetHealth = bot.CurrentTarget.GetComponent<Health> ();
 
 		if(targetHealth){

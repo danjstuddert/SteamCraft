@@ -63,6 +63,8 @@ public class Factory : MonoBehaviour {
 				break;
 			}
 		}
+
+		GetComponent<Health>().Init();
 	}
 
 	void Update(){

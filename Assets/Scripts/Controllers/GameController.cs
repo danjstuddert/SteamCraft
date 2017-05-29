@@ -23,6 +23,7 @@ public class GameController : Singleton<GameController> {
 		}
 
 		PlayerController.Instance.Init();
+		CanvasController.Instance.Init();
 	}
 
 	//----------------------------------------------------------
@@ -45,6 +46,7 @@ public class GameController : Singleton<GameController> {
 				DespawnBot(obj.GetComponent<Bot>());
 				break;
 			case "Factory":
+				EndGame(obj);
 				break;
 			default:
 				Debug.LogError (string.Format("{0} does not contain a health script but despawn was requested", obj.name));
@@ -93,6 +95,27 @@ public class GameController : Singleton<GameController> {
 	}
 
 	//----------------------------------------------------------
+	//ResetLevel()
+	//Resets the game level
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public void ResetLevel() {
+		Time.timeScale = 1;
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	}
+
+	//----------------------------------------------------------
+	//Quit()
+	//Quits the game
+	//Return:
+	//		Void
+	//----------------------------------------------------------
+	public void Quit() {
+		Application.Quit();
+	}
+
+	//----------------------------------------------------------
 	//DespawnBot()
 	//Tells the factory that the bot comes from that it is gone
 	//Param:
@@ -104,28 +127,11 @@ public class GameController : Singleton<GameController> {
 		bot.HomeFactory.RemoveBot(bot);
 		SimplePool.Despawn (bot.gameObject);	
 	}
-
-	//----------------------------------------------------------
-	//DespawnBot()
-	//Correctly handles when a player wins the game and then resets the scene
-	//Param:
-	//		Bot bot - the bot to despawn
-	//Return:
-	//		Void
-	//----------------------------------------------------------
-	private void PlayerWon(Player player) {
-		Debug.Log(string.Format("{0} has won!", player.name));
-
-		StartCoroutine(ReloadScene(1f));
-	}
-
-	private IEnumerator ReloadScene(float t) {
-		float timer = 0f;
-		while (timer < t) {
-			timer += Time.deltaTime;
-			yield return null;
-		}
-
-		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+	
+	private void EndGame(GameObject obj) {
+		Transform winningPlayer = GetOpposingFactory(obj.GetComponent<Factory>().owningPlayer).owningPlayer.transform;
+		obj.SetActive(false);
+		CanvasController.Instance.ShowWinScreen(winningPlayer.name);
+		Time.timeScale = 0f;
 	}
 }
