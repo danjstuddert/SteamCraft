@@ -4,16 +4,17 @@ using UnityEngine;
 using XboxCtrlrInput;
 
 public class PlayerCommand : MonoBehaviour {
+	//commandTarget is the command target object that is owned by this player
 	public GameObject commandTarget;
-	//The speed the command target moves at
+	//commandSpeed is the speed the command target moves at
 	public float commandSpeed;
-	//The maximum distance that the command target can be from the player
+	//commandMaxDistance is the maximum distance that the command target can be from the player
 	public float commandMaxDistance;
 
-	//The controller that controls the object
+	//controller is the controller that controls the object
 	private XboxController controller;
 
-	//The last station touched by the command target
+	//selectedStation is the last station touched by the command target
 	private UpgradeStation selectedStation;
 	//controlledBots is the list of currently controlled bots
 	private List<Bot> controlledBots;
@@ -119,6 +120,13 @@ public class PlayerCommand : MonoBehaviour {
 		}
 	}
 
+	//----------------------------------------------------------
+	//ProcessCommand()
+	//Work out what command should be issued to following bots depending
+	//on the position of the command target
+	//Return:
+	//		Void
+	//----------------------------------------------------------
 	private void ProcessCommand(){
 		//If there is a Drone and an Upgrade Station was selected, send a Drone to the Upgrade Station
 		if (selectedStation != null){

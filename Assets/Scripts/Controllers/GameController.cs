@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 //Handles the starting and running of the game, 
 //including despawning of killed units and win conditions
 public class GameController : Singleton<GameController> {
-	//All of the factories in the game
+	//factoryList is a list of all of the factories in the game
 	private List<Factory> factoryList;
 
 	void Start () {

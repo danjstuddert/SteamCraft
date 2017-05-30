@@ -5,18 +5,18 @@ using XboxCtrlrInput;
 
 //Handles the movement of the player objects
 public class PlayerMove : MonoBehaviour {
-	//The speed that the player moves at
+	//movementSpeed is the speed that the player moves at
 	public float movementSpeed;
-	//The maximum speed that the player can move at
+	//maxMovementSpeed is the maximum speed that the player can move at
 	public float maxMovementSpeed;
-	//The speed the player rotates at
+	//rotationSpeed is the speed the player rotates at
 	public float rotationSpeed;
 
-	//The controller that controls the object
+	//controller is the controller that controls the object
 	private XboxController controller;
-	//The player's rigidbody component
+	//rBody is the player's rigidbody component
 	private Rigidbody rBody;
-	//The velocity to apply every fixed update
+	//moveVelocity is the velocity to apply every fixed update
 	private Vector3 moveVelocity;
 
 	//----------------------------------------------------------

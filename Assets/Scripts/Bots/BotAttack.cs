@@ -71,11 +71,4 @@ public abstract class BotAttack : MonoBehaviour {
 			targetHealth.AdjustHealth (-attackDamage);
 		}
 	}
-
-	void OnDrawGizmosSelected(){
-		if(bot.CurrentTarget){
-			Gizmos.color = Color.red;
-			Gizmos.DrawRay (transform.position, bot.CurrentTarget.position- transform.position);
-		}
-	}
 }

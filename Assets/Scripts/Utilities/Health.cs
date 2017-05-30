@@ -4,16 +4,21 @@ using UnityEngine;
 
 //Handles the health of an object
 public class Health : MonoBehaviour {
-	//The starting amount of health an object has
+	//startingHealth is the starting amount of health an object has
 	public int startingHealth;
 
-	//The objects current health
+	//CurrentHealth is the objects current health
 	public int CurrentHealth {get; private set;}
 
-	//The maximum health an object can have
+	//maxHealth is the maximum health an object can have
 	private int maxHealth;
 
-	//Sets up the objects health
+	//----------------------------------------------------------
+	//Init()
+	//Sets up the health of the object
+	//Return:
+	//		void
+	//----------------------------------------------------------
 	public void Init() {
 		//Set our health Current and max health values to starting health
 		CurrentHealth = startingHealth;

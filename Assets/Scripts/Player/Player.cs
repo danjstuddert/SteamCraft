@@ -8,7 +8,7 @@ using XboxCtrlrInput;
 //[RequireComponent(typeof(PlayerCommand))]
 [RequireComponent(typeof(PlayerCall))]
 public class Player : MonoBehaviour {
-	//The controller that controls the object
+	//controller is the controller that controls the object
 	public XboxController controller;
 
 	//move is the player's movement script

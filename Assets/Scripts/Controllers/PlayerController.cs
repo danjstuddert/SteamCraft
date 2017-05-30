@@ -6,10 +6,14 @@ public enum Faction { Red, Blue }
 
 //A script that manages the instances of player objects in the game
 public class PlayerController : Singleton<PlayerController> {
+	//playerRespawnTime is the time it takes for players to respawn
 	public float playerRespawnTime;
+	//redSpawnPoint is the point where the red player respawns
 	public Transform redSpawnPoint;
+	//blueSpawnPoint is the point where the blue player respawns
 	public Transform blueSpawnPoint;
 
+	//players is a list of the current players
 	private List<Player> players;
 
 	//----------------------------------------------------------

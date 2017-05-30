@@ -4,16 +4,24 @@ using UnityEngine;
 using XboxCtrlrInput;
 
 public class PlayerCall : MonoBehaviour {
-	//The command circle object associated with the player
+	//callCircle is the call circle object associated with the player
 	public GameObject callCircle;
-	//The speed the call circle moves at
+	//callCircleSpeed is the speed the call circle moves at
 	public float callCircleSpeed;
-	//The maximum distance that the call circle can be from the player
+	//callCircleMaxDistance is the maximum distance that the call circle can be from the player
 	public float callCircleMaxDistance;
 
-	//The controller that is assigned to this player
+	//controller is the controller that is assigned to this player
 	private XboxController controller;
 
+	//----------------------------------------------------------
+	//Init()
+	//Turns on and off the call circle depending on player input
+	//Params:
+	//		XboxController controller - the controller that is assigned to this player
+	//Return:
+	//		Void
+	//----------------------------------------------------------
 	public void Init(XboxController controller) {
 		this.controller = controller;
 
@@ -45,6 +53,12 @@ public class PlayerCall : MonoBehaviour {
 		}
 	}
 
+	//----------------------------------------------------------
+	//MoveCircle()
+	//Moves the call circle depending on player input
+	//Return:
+	//		Void
+	//----------------------------------------------------------
 	private void MoveCircle() {
 		Vector3 movement = new Vector3(XCI.GetAxis(XboxAxis.RightStickX, controller), 0f, XCI.GetAxis(XboxAxis.RightStickY, controller)) * callCircleSpeed * Time.deltaTime;
 

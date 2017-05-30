@@ -25,6 +25,14 @@ public class CanvasController : Singleton<CanvasController> {
 		winText = winScreen.transform.GetChild(0).GetComponent<Text>();
 	}
 
+	//----------------------------------------------------------
+	//ShowWinScreen()
+	//Shows the win screen updating it to display the winning players name
+	//Params:
+	//		string winningPlayer - the name of the winning player
+	//Return:
+	//		Void
+	//----------------------------------------------------------
 	public void ShowWinScreen(string winningPlayer) {
 		if(winScreen.activeInHierarchy == false) {
 			winScreen.SetActive(true);
