@@ -2,30 +2,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-//A base class that handles bot attacking
+// A base class that handles bot attacking
 public abstract class BotAttack : MonoBehaviour {
-	//attackDamage is the damage inflicted with each attack
+// attackDamage is the damage inflicted with each attack
 	public int attackDamage;
-	//attackRate is how fast the bot attacks
+// attackRate is how fast the bot attacks
 	public float attackRate;
-	//attackRange is the range that the bot has to be in to attack
+// attackRange is the range that the bot has to be in to attack
 	public float attackRange;
+// attackingMask is the layermask to check attacks against
 	public LayerMask attackingMask;
 
-	//bot is the bot script attached to this object
+// bot is the bot script attached to this object
 	protected Bot bot;
 
-	//attackCount is a timer to use when checking to see if the bot can attack
+// attackCount is a timer to use when checking to see if the bot can attack
 	private float attackCount;
 
-	//----------------------------------------------------------
-	//Init()
-	//Ensures the BotAttack script is setup correctly
-	//Params:
-	//		Bot bot - the bot script that is attached to this object
-	//Return:
-	//		Void
-	//----------------------------------------------------------
+//----------------------------------------------------------
+//	Init()
+// Ensures the BotAttack script is setup correctly
+//
+// Params:
+//		Bot bot - the bot script that is attached to this object
+// Return:
+//		Void
+//----------------------------------------------------------
 	public virtual void Init(Bot bot) {
 		this.bot = bot;
 
@@ -34,16 +36,28 @@ public abstract class BotAttack : MonoBehaviour {
 		attackCount = attackRate;
 	}
 
+//--------------------------------------------------------------------------------------
+//	Update()
+// Runs every frame
+//
+// Param:
+//		None
+// Return:
+//		Void
+//--------------------------------------------------------------------------------------
 	void Update(){
 		CheckAttack ();
 	}
 
-	//----------------------------------------------------------
-	//CheckAttack()
-	//Checks to see if this bot should attack
-	//Return:
-	//		Void
-	//----------------------------------------------------------
+//----------------------------------------------------------
+//CheckAttack()
+//Checks to see if this bot should attack
+//
+//Param:
+//		None
+//Return:
+//		Void
+//----------------------------------------------------------
 	private void CheckAttack(){
 		if(bot.CurrentTarget == null){
 			return;
@@ -57,14 +71,16 @@ public abstract class BotAttack : MonoBehaviour {
 		attackCount += Time.deltaTime;
 	}
 
-	//----------------------------------------------------------
-	//ApplyDamage()
-	//Applies damage to the current target
-	//Return:
-	//		Void
-	//----------------------------------------------------------
+//----------------------------------------------------------
+//ApplyDamage()
+//Applies damage to the current target
+//
+//Param:
+//		None
+//Return:
+//		Void
+//----------------------------------------------------------
 	protected virtual void ApplyDamage(){
-		Debug.Log(string.Format("Apply Damage to {0}", bot.CurrentTarget.name));
 		Health targetHealth = bot.CurrentTarget.GetComponent<Health> ();
 
 		if(targetHealth){

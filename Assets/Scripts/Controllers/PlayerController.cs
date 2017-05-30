@@ -2,28 +2,31 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// Used to declare the faction of an object
 public enum Faction { Red, Blue }
 
-//A script that manages the instances of player objects in the game
+// A script that manages the instances of player objects in the game
 public class PlayerController : Singleton<PlayerController> {
-	//playerRespawnTime is the time it takes for players to respawn
+// playerRespawnTime is the time it takes for players to respawn
 	public float playerRespawnTime;
-	//redSpawnPoint is the point where the red player respawns
+// redSpawnPoint is the point where the red player respawns
 	public Transform redSpawnPoint;
-	//blueSpawnPoint is the point where the blue player respawns
+// blueSpawnPoint is the point where the blue player respawns
 	public Transform blueSpawnPoint;
 
-	//players is a list of the current players
+// players is a list of the current players
 	private List<Player> players;
 
-	//----------------------------------------------------------
-	//Init()
-	//Ensures correct setup of the PlayerController component and
-	//starts initialisation of all player objects in the game
-	//
-	//Return:
-	//		Void
-	//----------------------------------------------------------
+//----------------------------------------------------------
+//	Init()
+// Ensures correct setup of the PlayerController component and
+// starts initialisation of all player objects in the game
+//
+// Param:
+// 		None
+// Return:
+//		Void
+//----------------------------------------------------------
 	public void Init() {
 		players = new List<Player>();
 
@@ -34,13 +37,15 @@ public class PlayerController : Singleton<PlayerController> {
 		}
 	}
 
-	//----------------------------------------------------------
-	//PlayerDead()
-	//Handles player death
-	//
-	//Return:
-	//		Void
-	//----------------------------------------------------------
+//----------------------------------------------------------
+//	PlayerDead()
+// Handles player death
+//
+// Param:
+//		None
+//	Return:
+//		Void
+//----------------------------------------------------------
 	public void PlayerDead(GameObject player) {
 		Player playerScript = player.GetComponent<Player>();
 
@@ -54,14 +59,15 @@ public class PlayerController : Singleton<PlayerController> {
 		} 
 	}
 
-	//----------------------------------------------------------
-	//RespawnPlayer()
-	//respawns a player to their given point
-	//Params:
-	//		Player player - the player to respawn
-	//Return:
-	//		Void
-	//----------------------------------------------------------
+//----------------------------------------------------------
+//	RespawnPlayer()
+// Respawns a player to their given point
+//
+// Params:
+//		Player player - the player to respawn
+// Return:
+//		Void
+//----------------------------------------------------------
 	private IEnumerator RespawnPlayer(Player player){
 		yield return new WaitForSeconds (playerRespawnTime);
 
