@@ -147,7 +147,8 @@ public class Factory : MonoBehaviour {
 			Vector3 location = spawnLocations [i];
 
 			if(SpawnLocationOccupied(location) == false) {
-				Bot bot = SimplePool.Spawn (BotLibrary.Instance.GetBotByType(droneString), location, Quaternion.identity).GetComponent<Bot>();
+				Bot bot = SimplePool.Spawn (BotLibrary.Instance.GetBotByType(droneString), location, 
+					owningPlayer.playerFaction == Faction.Blue ? Quaternion.Euler(0f,90f,0f) : Quaternion.Euler(0f, -90f, 0f)).GetComponent<Bot>();
 
 				bot.transform.SetParent (botParent);
 				bot.Init (this);
