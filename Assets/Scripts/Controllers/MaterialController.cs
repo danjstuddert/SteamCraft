@@ -10,7 +10,7 @@ public struct TeamMaterials{
 }
 
 // An identifier to set what type of object that this is
-public enum ObjectType {Bot, Factory, UpgradeStation}
+public enum ObjectType {Bot, Factory, UpgradeStation, Projectile}
 
 // Controls the assignment of materials depending on the player that owns it
 public class MaterialController : Singleton<MaterialController> {
@@ -22,6 +22,8 @@ public class MaterialController : Singleton<MaterialController> {
 	public TeamMaterials upgradeStationMaterials;
 // upgradeStationHoloMaterials is a set of materials used for bots
 	public TeamMaterials hologramMaterials;
+// projectileMaterials is a set of materials used for projectile trail renderers
+	public TeamMaterials projectileMaterials;
 
 //----------------------------------------------------------
 //	UpdateMaterial()
@@ -46,6 +48,9 @@ public class MaterialController : Singleton<MaterialController> {
 		case ObjectType.UpgradeStation:
 			r.material = faction == Faction.Blue ? upgradeStationMaterials.blueMaterial : upgradeStationMaterials.redMaterial;
 			r.transform.GetComponentInChildren<Renderer>().material = faction == Faction.Blue ? hologramMaterials.blueMaterial : hologramMaterials.redMaterial;
+				break;
+		case ObjectType.Projectile:
+				r.material = faction == Faction.Blue ? projectileMaterials.blueMaterial : projectileMaterials.redMaterial;
 				break;
 		default:
 			Debug.LogError (string.Format ("{0} is not a valid object cannot change its material", r.transform.name));

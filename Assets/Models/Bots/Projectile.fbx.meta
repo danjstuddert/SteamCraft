@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 967fd831ffe248f48b59eb52e41e97bf
-timeCreated: 1496236120
+guid: 4fad192840f8e46438485d7dadec638a
+timeCreated: 1496568994
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -9,8 +9,7 @@ ModelImporter:
     400000: //RootNode
     2300000: //RootNode
     3300000: //RootNode
-    4300000: polySurface22
-    4300002: GunBot
+    4300000: Projecttile
     9500000: //RootNode
   materials:
     importMaterials: 1

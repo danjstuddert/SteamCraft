@@ -15,9 +15,8 @@ public abstract class BotAttack : MonoBehaviour {
 
 // bot is the bot script attached to this object
 	protected Bot bot;
-
 // attackCount is a timer to use when checking to see if the bot can attack
-	private float attackCount;
+	protected float attackCount;
 
 //----------------------------------------------------------
 //	Init()
@@ -59,13 +58,12 @@ public abstract class BotAttack : MonoBehaviour {
 //		Void
 //----------------------------------------------------------
 	private void CheckAttack(){
-		if(bot.CurrentTarget == null){
+		if(bot.CurrentTarget == null || bot.CurrentTarget.tag == "Player" && bot.CurrentTarget.GetComponent<Player>().playerFaction == bot.OwningPlayer.playerFaction){
 			return;
 		}
 
 		if (Vector3.Distance (transform.position, bot.CurrentTarget.position) <= attackRange && attackCount >= attackRate) {
 			ApplyDamage();
-			attackCount = 0f;
 		}
 
 		attackCount += Time.deltaTime;
@@ -81,6 +79,7 @@ public abstract class BotAttack : MonoBehaviour {
 //		Void
 //----------------------------------------------------------
 	protected virtual void ApplyDamage(){
+		attackCount = 0f;
 		Health targetHealth = bot.CurrentTarget.GetComponent<Health> ();
 
 		if(targetHealth){
