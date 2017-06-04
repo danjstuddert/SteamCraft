@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,17 +10,18 @@ public struct TeamMaterials{
 }
 
 // An identifier to set what type of object that this is
-public enum ObjectType {Drone, BuzzSaw, GunBot, Boomer, ShieldWall, Factory, UpgradeStation}
+public enum ObjectType {Bot, Factory, UpgradeStation}
 
 // Controls the assignment of materials depending on the player that owns it
 public class MaterialController : Singleton<MaterialController> {
-	public TeamMaterials droneMaterials;
-	public TeamMaterials buzzSawMaterials;
-	public TeamMaterials gunBotMaterials;
-	public TeamMaterials boomerMaterials;
-	public TeamMaterials shieldWallMaterials;
+// botMaterials is a set of materials used for bots
+	public TeamMaterials botMaterials;
+// factoryMaterials is a set of materials used for bots
 	public TeamMaterials factoryMaterials;
+// upgradeStationMaterials is a set of materials used for bots
 	public TeamMaterials upgradeStationMaterials;
+// upgradeStationHoloMaterials is a set of materials used for bots
+	public TeamMaterials hologramMaterials;
 
 //----------------------------------------------------------
 //	UpdateMaterial()
@@ -36,27 +37,16 @@ public class MaterialController : Singleton<MaterialController> {
 //----------------------------------------------------------
 	public void UpdateMaterial(Renderer r, ObjectType type, Faction faction){
 		switch(type){
-		case ObjectType.Drone:
-			r.material = faction == Faction.Blue ? droneMaterials.blueMaterial : droneMaterials.redMaterial;
-			break;
-		case ObjectType.BuzzSaw:
-			r.material = faction == Faction.Blue ? buzzSawMaterials.blueMaterial : buzzSawMaterials.redMaterial;
-			break;
-		case ObjectType.GunBot:
-			r.material = faction == Faction.Blue ? gunBotMaterials.blueMaterial : gunBotMaterials.redMaterial;
-			break;
-		case ObjectType.Boomer:
-			r.material = faction == Faction.Blue ? boomerMaterials.blueMaterial : boomerMaterials.redMaterial;
-			break;
-		case ObjectType.ShieldWall:
-			r.material = faction == Faction.Blue ? shieldWallMaterials.blueMaterial : shieldWallMaterials.redMaterial;
-			break;
+		case ObjectType.Bot:
+				r.material = faction == Faction.Blue ? botMaterials.blueMaterial : botMaterials.redMaterial;
+				break;
 		case ObjectType.Factory:
 			r.material = faction == Faction.Blue ? factoryMaterials.blueMaterial : factoryMaterials.redMaterial;
 			break;
 		case ObjectType.UpgradeStation:
 			r.material = faction == Faction.Blue ? upgradeStationMaterials.blueMaterial : upgradeStationMaterials.redMaterial;
-			break;
+			r.transform.GetComponentInChildren<Renderer>().material = faction == Faction.Blue ? hologramMaterials.blueMaterial : hologramMaterials.redMaterial;
+				break;
 		default:
 			Debug.LogError (string.Format ("{0} is not a valid object cannot change its material", r.transform.name));
 			break;	
