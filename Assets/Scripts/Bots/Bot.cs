@@ -39,6 +39,8 @@ public abstract class Bot : MonoBehaviour {
 		}
 
 		GetComponent<Health> ().Init ();
+
+		MaterialController.Instance.UpdateMaterial(GetComponent<Renderer>(), ObjectType.Bot, OwningPlayer.playerFaction);
 	}
 
 //----------------------------------------------------------

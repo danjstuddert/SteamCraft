@@ -14,6 +14,5 @@ public class Buzzsaw : Bot {
 //----------------------------------------------------------
 	public override void Init (Factory homeFactory) {
 		base.Init (homeFactory);
-		MaterialController.Instance.UpdateMaterial (GetComponent<Renderer> (), ObjectType.Bot, OwningPlayer.playerFaction);
 	}
 }

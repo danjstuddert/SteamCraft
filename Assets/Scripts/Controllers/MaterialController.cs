@@ -41,6 +41,11 @@ public class MaterialController : Singleton<MaterialController> {
 		switch(type){
 		case ObjectType.Bot:
 				r.material = faction == Faction.Blue ? botMaterials.blueMaterial : botMaterials.redMaterial;
+
+				foreach(Renderer rend in r.transform.GetComponentsInChildren<Renderer>()) {
+					rend.material = faction == Faction.Blue ? botMaterials.blueMaterial : botMaterials.redMaterial;
+				}
+
 				break;
 		case ObjectType.Factory:
 			r.material = faction == Faction.Blue ? factoryMaterials.blueMaterial : factoryMaterials.redMaterial;

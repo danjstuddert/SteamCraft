@@ -69,7 +69,7 @@ public class PlayerMove : MonoBehaviour {
 //		Void
 //----------------------------------------------------------
 	private void UpdateMoveVelocity() {
-		moveVelocity = new Vector3(XCI.GetAxis(XboxAxis.LeftStickX, controller), 0f, XCI.GetAxis(XboxAxis.LeftStickY, controller));
+		moveVelocity = new Vector3(XCI.GetAxisRaw(XboxAxis.LeftStickX, controller), 0f, XCI.GetAxisRaw(XboxAxis.LeftStickY, controller));
 	}
 
 //----------------------------------------------------------
@@ -87,6 +87,8 @@ public class PlayerMove : MonoBehaviour {
 
 			if (rBody.velocity.magnitude > maxMovementSpeed) {
 				rBody.velocity = rBody.velocity.normalized * maxMovementSpeed;
+			} else if (moveVelocity == Vector3.zero) {
+				rBody.velocity = Vector3.zero;
 			}
 		}
 	}

@@ -120,18 +120,16 @@ public class BotMove : MonoBehaviour {
 		Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius, detectionLayer);
 		Transform target = null;
 		for (int i = 0; i < hitColliders.Length; i++) {
-			if (hitColliders[i].tag == "Player" && hitColliders[i].gameObject.activeInHierarchy && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
-				target = hitColliders[i].transform;
-				break;
-			}
-
 			if (hitColliders[i].tag == "Bot" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
 				if(hitColliders[i].GetComponent<Bot>() == null) {
 					target = hitColliders[i].transform;
-					continue;
+					break;
 				}
 
 				target = CheckTargetPriority(hitColliders[i].transform, target);
+				continue;
+			}if (hitColliders[i].tag == "Player" && hitColliders[i].gameObject.activeInHierarchy && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
+				target = hitColliders[i].transform;
 				continue;
 			} else if (hitColliders[i].tag == "Drone" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
 				target = CheckTargetPriority(hitColliders[i].transform, target);
