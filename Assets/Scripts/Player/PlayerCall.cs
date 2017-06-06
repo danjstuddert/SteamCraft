@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
 
+// Handles the logic of the calling circle
 public class PlayerCall : MonoBehaviour {
 // callCircle is the call circle object associated with the player
 	public GameObject callCircle;
@@ -10,9 +11,15 @@ public class PlayerCall : MonoBehaviour {
 	public float callCircleSpeed;
 // callCircleMaxDistance is the maximum distance that the call circle can be from the player
 	public float callCircleMaxDistance;
+// resetTime is the time it takes until the callCircle resets its position
+	public float resetTime;
 
 // controller is the controller that is assigned to this player
 	private XboxController controller;
+// resetCounter is a counter to compare resetTime against
+	private float resetCounter;
+// shouldReset is a check to see if the circle should reset on spawn
+	private bool shouldReset;
 
 //----------------------------------------------------------
 //	Init()
@@ -43,6 +50,7 @@ public class PlayerCall : MonoBehaviour {
 	void Update() {
 		CheckCircleActive();
 		MoveCircle();
+		CheckCircleReset ();
 	}
 
 //----------------------------------------------------------
@@ -57,12 +65,17 @@ public class PlayerCall : MonoBehaviour {
 	private void CheckCircleActive() {
 		if (XCI.GetAxis(XboxAxis.RightTrigger, controller) != 0 && callCircle.activeInHierarchy == false && 
 			XCI.GetAxis(XboxAxis.LeftTrigger, controller) == 0 ) {
-			callCircle.transform.position = transform.position;
+			if(shouldReset){
+				callCircle.transform.position = transform.position;	
+			}
+
 			callCircle.SetActive(true);
 		}
 
 		else if (XCI.GetAxis(XboxAxis.RightTrigger, controller) == 0 && callCircle.activeInHierarchy) {
 			callCircle.SetActive(false);
+			shouldReset = false;
+			resetCounter = 0f;
 		}
 	}
 
@@ -85,6 +98,27 @@ public class PlayerCall : MonoBehaviour {
 			Vector3 heading = (callCircle.transform.position - transform.position);
 			Vector3 direction = heading / distance;
 			callCircle.transform.localPosition = direction * callCircleMaxDistance;
+		}
+	}
+
+//----------------------------------------------------------
+//	CheckCircleReset()
+// Checks if the call circle should be reset
+//
+// Param:
+//		None
+// Return:
+//		Void
+//----------------------------------------------------------
+	private void CheckCircleReset(){
+		if(shouldReset == true){
+			return;
+		}
+
+		resetCounter += Time.deltaTime;
+
+		if(resetCounter >= resetTime){
+			shouldReset = true;
 		}
 	}
 }

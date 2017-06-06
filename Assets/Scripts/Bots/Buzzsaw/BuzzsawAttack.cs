@@ -4,5 +4,4 @@ using UnityEngine;
 
 // The attack class of the buzzsaw bot
 public class BuzzsawAttack : BotAttack {
-
 }

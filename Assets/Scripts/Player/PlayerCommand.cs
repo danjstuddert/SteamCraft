@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XboxCtrlrInput;
 
+// Handles the command target object
 public class PlayerCommand : MonoBehaviour {
 // commandTarget is the command target object that is owned by this player
 	public GameObject commandTarget;
@@ -10,6 +11,8 @@ public class PlayerCommand : MonoBehaviour {
 	public float commandSpeed;
 // commandMaxDistance is the maximum distance that the command target can be from the player
 	public float commandMaxDistance;
+// resetTime is the time it takes until the callCircle resets its position
+	public float resetTime;
 
 // controller is the controller that controls the object
 	private XboxController controller;
@@ -18,6 +21,10 @@ public class PlayerCommand : MonoBehaviour {
 	private UpgradeStation selectedStation;
 // controlledBots is the list of currently controlled bots
 	private List<Bot> controlledBots;
+// resetCounter is a counter to compare resetTime against
+	private float resetCounter;
+// shouldReset is a check to see if the circle should reset on spawn
+	private bool shouldReset;
 
 //----------------------------------------------------------
 //	Init()
@@ -48,6 +55,7 @@ public class PlayerCommand : MonoBehaviour {
 	void Update(){
 		CheckTargetActive ();
 		MoveTarget ();
+		CheckTargetReset ();
 	}
 
 //----------------------------------------------------------
@@ -105,14 +113,19 @@ public class PlayerCommand : MonoBehaviour {
 //----------------------------------------------------------
 	private void CheckTargetActive() {
 		if (XCI.GetAxis(XboxAxis.LeftTrigger, controller) != 0 && commandTarget.activeInHierarchy == false && XCI.GetAxis(XboxAxis.RightTrigger, controller) == 0) {
-			commandTarget.transform.position = transform.position;
+			if(shouldReset){
+				commandTarget.transform.position = transform.position;	
+			}
+
 			commandTarget.SetActive(true);
 		}
 
 		else if (XCI.GetAxis(XboxAxis.LeftTrigger, controller) == 0 && commandTarget.activeInHierarchy) {
 			commandTarget.SetActive(false);
-
 			ProcessCommand ();
+
+			shouldReset = false;
+			resetCounter = 0f;
 		}
 	}
 
@@ -140,6 +153,27 @@ public class PlayerCommand : MonoBehaviour {
 	}
 
 //----------------------------------------------------------
+//	CheckCircleReset()
+// Checks if the call circle should be reset
+//
+// Param:
+//		None
+// Return:
+//		Void
+//----------------------------------------------------------
+	private void CheckTargetReset(){
+		if(shouldReset == true){
+			return;
+		}
+
+		resetCounter += Time.deltaTime;
+
+		if(resetCounter >= resetTime){
+			shouldReset = true;
+		}
+	}
+
+//----------------------------------------------------------
 //	ProcessCommand()
 // Work out what command should be issued to following bots depending
 // on the position of the command target
@@ -150,34 +184,70 @@ public class PlayerCommand : MonoBehaviour {
 //		Void
 //----------------------------------------------------------
 	private void ProcessCommand(){
-		if (selectedStation != null){
-			for (int i = 0; i < controlledBots.Count; i++) {
-				if(controlledBots[i].tag == "Drone") {
-					controlledBots[i].GiveTarget(selectedStation.transform);
-					controlledBots.Remove(controlledBots[i]);
-					break;
-				}
-			}
-			selectedStation = null;
-		} else {
-			bool foundUpgraded = false;
-			for (int i = 0; i < controlledBots.Count; i++) {
-				if(controlledBots[i].tag == "Bot") {
-					controlledBots[i].GivePoint(commandTarget.transform.position);
-					controlledBots.Remove(controlledBots[i]);
-					foundUpgraded = true;
-					break;
+		if (selectedStation != null) {
+			float distance = Mathf.Infinity;
+			Bot selectedBot = null;
+
+			for (int i = controlledBots.Count - 1; i >= 0 ; i--) {
+				if(controlledBots[i].tag == "Drone"){
+					float botDistance = Vector3.Distance (selectedStation.transform.position, controlledBots [i].transform.position);
+
+					if(botDistance < distance) {
+						selectedBot = controlledBots [i];
+						distance = botDistance;
+					}
 				}
 			}
 
-			if(foundUpgraded == false) {
-				for (int i = 0; i < controlledBots.Count; i++) {
-					if (controlledBots[i].tag == "Drone") {
-						controlledBots[i].GivePoint(commandTarget.transform.position);
-						controlledBots.Remove(controlledBots[i]);
-						break;
+			if(selectedBot != null){
+				selectedBot.GiveTarget(selectedStation.transform);
+				controlledBots.Remove(selectedBot);
+			}
+
+			selectedStation = null;
+		} else {
+			bool foundUpgraded = false;
+			float distance = Mathf.Infinity;
+			Bot selectedBot = null;
+
+			for (int i = controlledBots.Count - 1; i >= 0 ; i--) {
+				if(controlledBots[i].tag == "Bot"){
+					float botDistance = Vector3.Distance (commandTarget.transform.position, controlledBots [i].transform.position);
+
+					if(botDistance < distance) {
+						selectedBot = controlledBots [i];
+						distance = botDistance;
 					}
 				}
+			}
+
+			if(selectedBot != null){
+				selectedBot.GivePoint(commandTarget.transform.position);
+				controlledBots.Remove(selectedBot);
+				foundUpgraded = true;
+			}
+
+
+			if(foundUpgraded == false) {
+				distance = Mathf.Infinity;
+				selectedBot = null;
+
+				for (int i = controlledBots.Count - 1; i >= 0 ; i--) {
+					if(controlledBots[i].tag == "Drone"){
+						float botDistance = Vector3.Distance (commandTarget.transform.position, controlledBots [i].transform.position);
+
+						if(botDistance < distance) {
+							selectedBot = controlledBots [i];
+							distance = botDistance;
+						}
+					}
+				}
+
+				if(selectedBot != null){
+					selectedBot.GivePoint(commandTarget.transform.position);
+					controlledBots.Remove(selectedBot);
+				}
+
 			}
 		}
 	}

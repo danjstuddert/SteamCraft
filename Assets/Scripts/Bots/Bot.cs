@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // The base class that every Bot type inherits from
-[RequireComponent(typeof(BotMove))]
-public abstract class Bot : MonoBehaviour {
+public class Bot : MonoBehaviour {
 // homeFactory is the factory that this bot was spawned from
-	public Factory HomeFactory {get; private set;}
+	public Factory HomeFactory { get; private set;}
 // OwningPlayer is the player that owns the bot
 	public Player OwningPlayer { get; private set; }
 // CurrentTarget is the current target of the bot

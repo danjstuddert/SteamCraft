@@ -19,6 +19,8 @@ public class GameController : Singleton<GameController> {
 //		Void
 //----------------------------------------------------------
 	void Start () {
+		Cursor.visible = false;
+
 		factoryList = new List<Factory>();
 		foreach(Factory f in FindObjectsOfType(typeof(Factory))){
 			factoryList.Add(f);
