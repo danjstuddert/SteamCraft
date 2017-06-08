@@ -1,11 +1,11 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 // Handles the attack sequence of the boomer bot
 public class BoomerAttack : BotAttack {
 	public float explosionRadius;
-	//public ParticleSystem explosionParticles;
+	public ParticleSystem explosionParticles;
 
 //----------------------------------------------------------
 //	ApplyDamage()
@@ -20,13 +20,11 @@ public class BoomerAttack : BotAttack {
 	protected override void ApplyDamage () {
 		Collider[] hitColliders = Physics.OverlapSphere (transform.position, explosionRadius, attackingMask);
 
-
-		Debug.Log (hitColliders.Length);
 		foreach (Collider col in hitColliders) {
 			col.GetComponent<Health> ().AdjustHealth (-attackDamage);
 		}
 
-		//ParticleSystem p = SimplePool.Spawn (explosionParticles.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem> ();
+		ParticleSystem p = SimplePool.Spawn (explosionParticles.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem> ();
 		GetComponent<Health> ().AdjustHealth (int.MaxValue);
 	}
 }
