@@ -21,10 +21,14 @@ public class BoomerAttack : BotAttack {
 		Collider[] hitColliders = Physics.OverlapSphere (transform.position, explosionRadius, attackingMask);
 
 		foreach (Collider col in hitColliders) {
-			col.GetComponent<Health> ().AdjustHealth (-attackDamage);
+			if(col.GetComponent<Bot>() && col.GetComponent<Bot>().OwningPlayer != bot.OwningPlayer || 
+				col.GetComponent<Player>() && col.GetComponent<Player>() != bot.OwningPlayer ||
+				col.GetComponent<Factory>() && col.GetComponent<Factory>().owningPlayer != bot.OwningPlayer) {
+				col.GetComponent<Health>().AdjustHealth(-attackDamage);
+			}
 		}
 
-		ParticleSystem p = SimplePool.Spawn (explosionParticles.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem> ();
-		GetComponent<Health> ().AdjustHealth (int.MaxValue);
+		SimplePool.Spawn (explosionParticles.gameObject, transform.position, Quaternion.identity).GetComponent<ParticleSystem> ();
+		GetComponent<Health> ().AdjustHealth (-int.MaxValue);
 	}
 }

@@ -2,14 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 // Controls the games canvas objects
 public class CanvasController : Singleton<CanvasController> {
 // winScreen is the games win screen
 	public GameObject winScreen;
+// restartButton is the button that restarts the level
+	public Button restartButton;
 
 // winText is the text on the win screen
 	private Text winText;
+// eventSystem is the scenes event system object
+	private EventSystem eventSystem;
+	
 
 //----------------------------------------------------------
 //	Init()
@@ -26,6 +32,7 @@ public class CanvasController : Singleton<CanvasController> {
 		}
 
 		winText = winScreen.transform.GetChild(0).GetComponent<Text>();
+		eventSystem = GameObject.Find("EventSystem").GetComponent<EventSystem>();
 	}
 
 //----------------------------------------------------------
@@ -43,5 +50,14 @@ public class CanvasController : Singleton<CanvasController> {
 		}
 
 		winText.text = string.Format("{0} wins!", winningPlayer);
+
+		StartCoroutine(SelectRestart());
+	}
+
+	private IEnumerator SelectRestart() {
+		eventSystem.SetSelectedGameObject(null);
+		yield return new WaitForEndOfFrame();
+
+		eventSystem.SetSelectedGameObject(restartButton.gameObject);
 	}
 }
