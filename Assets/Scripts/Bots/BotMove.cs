@@ -121,14 +121,11 @@ public class BotMove : MonoBehaviour {
 		Transform target = null;
 		for (int i = 0; i < hitColliders.Length; i++) {
 			if (hitColliders[i].tag == "Bot" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
-				if(hitColliders[i].GetComponent<Bot>() == null) {
+				if(hitColliders[i].GetComponent<Bot>() != null) {
 					target = hitColliders[i].transform;
 					break;
 				}
-
-				target = CheckTargetPriority(hitColliders[i].transform, target);
-				continue;
-			}if (hitColliders[i].tag == "Player" && hitColliders[i].gameObject.activeInHierarchy && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
+			} else if (hitColliders[i].tag == "Player" && hitColliders[i].gameObject.activeInHierarchy && hitColliders[i].GetComponent<Player>() != bot.OwningPlayer) {
 				target = hitColliders[i].transform;
 				continue;
 			} else if (hitColliders[i].tag == "Drone" && hitColliders[i].GetComponent<Bot>().OwningPlayer != bot.OwningPlayer) {
@@ -146,6 +143,10 @@ public class BotMove : MonoBehaviour {
 
 		if (CurrentTarget != null && movementMode == MovementMode.MoveToPoint) {
 			movementMode = MovementMode.MoveToTarget;
+		}
+
+		if(CurrentTarget != null && CurrentTarget.gameObject.activeInHierarchy == false) {
+			CurrentTarget = GameController.Instance.GetOpposingFactory(bot.OwningPlayer).transform;
 		}
 	}
 
