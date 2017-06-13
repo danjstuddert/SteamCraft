@@ -70,20 +70,16 @@ public abstract class BotAttack : MonoBehaviour {
 	}
 
 //----------------------------------------------------------
-//ApplyDamage()
-//Applies damage to the current target
+//	ApplyDamage()
+// Applies damage to the current target, empty in base botAttack class
+// because logic is unique in each script
 //
-//Param:
+// Param:
 //		None
-//Return:
+// Return:
 //		Void
 //----------------------------------------------------------
 	protected virtual void ApplyDamage(){
-		attackCount = 0f;
-		Health targetHealth = bot.CurrentTarget.GetComponent<Health> ();
-
-		if(targetHealth){
-			targetHealth.AdjustHealth (-attackDamage);
-		}
+		
 	}
 }

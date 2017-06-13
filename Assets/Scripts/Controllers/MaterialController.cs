@@ -5,7 +5,9 @@ using UnityEngine;
 [System.Serializable]
 // A struct that is used to set materials for each player
 public struct TeamMaterials{
+// blueMaterial is the material to use for the blue team
 	public Material blueMaterial;
+// redMaterial is the material to use for the blue team
 	public Material redMaterial;
 }
 

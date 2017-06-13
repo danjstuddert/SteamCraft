@@ -4,8 +4,8 @@ using UnityEngine;
 
 // Internal logic of the factory object
 public class Factory : MonoBehaviour {
-// droneString is the name of the drone prefab
-	public string droneString;
+// dronePrefab is the drone prefab
+	public GameObject dronePrefab;
 // startingDroneNumber is the initial number of drones to spawn
 	public int startingDroneNumber;
 // maxBotNumber is the maximum number of bots this factory is allowed to have
@@ -147,7 +147,7 @@ public class Factory : MonoBehaviour {
 			Vector3 location = spawnLocations [i];
 
 			if(SpawnLocationOccupied(location) == false) {
-				Bot bot = SimplePool.Spawn (BotLibrary.Instance.GetBotByType(droneString), location, 
+				Bot bot = SimplePool.Spawn (dronePrefab, location, 
 					owningPlayer.playerFaction == Faction.Blue ? Quaternion.Euler(0f,90f,0f) : Quaternion.Euler(0f, -90f, 0f)).GetComponent<Bot>();
 
 				bot.transform.SetParent (botParent);

@@ -54,6 +54,15 @@ public class CanvasController : Singleton<CanvasController> {
 		StartCoroutine(SelectRestart());
 	}
 
+//----------------------------------------------------------
+//	SelectRestart()
+// Makes sure that the restart button is selected by reselecting it
+//
+// Params:
+//		none
+// Return:
+//		WaitForEndOfFrame
+//----------------------------------------------------------
 	private IEnumerator SelectRestart() {
 		eventSystem.SetSelectedGameObject(null);
 		yield return new WaitForEndOfFrame();

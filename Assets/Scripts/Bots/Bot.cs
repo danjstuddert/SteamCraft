@@ -98,16 +98,16 @@ public class Bot : MonoBehaviour {
 		GameController.Instance.HandleDespawn (gameObject);
 	}
 
-	//----------------------------------------------------------
-	//	OnTriggerEnter()
-	// If the call circle of the owning player hits this trigger give the bot
-	// to the player and start following it
-	//
-	// Param:
-	//		Collider other - Any collider that passes through this trigger
-	// Return:
-	//		Void
-	//----------------------------------------------------------
+//----------------------------------------------------------
+//	OnTriggerEnter()
+// If the call circle of the owning player hits this trigger give the bot
+// to the player and start following it
+//
+// Param:
+//		Collider other - Any collider that passes through this trigger
+// Return:
+//		Void
+//----------------------------------------------------------
 	protected virtual void OnTriggerEnter(Collider other){
 		//If we were touched by our call circle start following the player
 		if(other.tag == "CallCircle" && other.GetComponent<CallCircle>().owningPlayer == OwningPlayer) {
